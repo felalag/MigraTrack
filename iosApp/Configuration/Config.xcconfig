@@ -1,6 +1,6 @@
-// Set TEAM_ID to your Apple Developer team to run on a device. The simulator needs no team.
-// A free Personal Team works too, but then the bundle identifier must be one that nobody else has registered.
-TEAM_ID =
+// The App Store team that owns com.migratrack.app. To sign under another team, a free Personal Team too,
+// change TEAM_ID and also APP_BUNDLE_ID, because nobody else can register an identifier this team owns.
+TEAM_ID = V3D2X838L7
 
 // The watch app and its complications append .watchkitapp and .watchkitapp.complications to this id.
 APP_BUNDLE_ID = com.migratrack.app
