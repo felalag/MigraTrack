@@ -135,9 +135,9 @@ The section "Remaining before release" of October 16, 2026 was never committed. 
 
 | ID | Blocker | Owner | Steps |
 |---|---|---|---|
-| B1 | Upload of a signed build to TestFlight | Owner | 2, 9 |
+| B1 | Upload of a signed build to TestFlight | Owner | 9 |
 | B2 | Store screenshots | Code takes them, owner uploads them | 7, 13 |
-| B3 | App Store Connect forms, with the new age rating questions | Owner | 6, 10–19 |
+| B3 | App Store Connect forms, with the new age rating questions | Owner | 10–19 |
 | N13 | This file is not in `main` | Code, then the owner merges | 22 |
 
 ## 5. Step-by-step plan
@@ -147,11 +147,11 @@ Do the steps in this order. A step can start when the steps in its "Needs" colum
 | # | Step | Owner | Needs | Status | Done when |
 |---|---|---|---|---|---|
 | 1 | Run `sudo xcodebuild -runFirstLaunch` on the build Mac. | Owner | — | Done | `xcrun simctl list runtimes` answers in a few seconds. |
-| 2 | **Membership and agreements.** Make sure that the Individual membership is active. In Business › Agreements, accept the latest Apple Developer Program License Agreement (N9). A free app needs no Paid Apps Agreement, no tax forms and no bank account. | Owner | — | Membership active (team `V3D2X838L7`). Agreement: not known | The Free Apps agreement shows "Active". |
+| 2 | **Membership and agreements.** Make sure that the Individual membership is active. In Business › Agreements, accept the latest Apple Developer Program License Agreement (N9). A free app needs no Paid Apps Agreement, no tax forms and no bank account. | Owner | — | Done. The Free Apps Agreement is Active from November 8, 2026 to October 19, 2027. The Paid Apps Agreement stays "New", because the app is free. | — |
 | 3 | **Decide the scope of 1.0.** | Owner | — | Done on November 8, 2026: all 47 languages, no China mainland ([APP_STORE.md](APP_STORE.md#localizations)) | — |
 | 4 | **Fix the two code blockers** N12 and N6. | Code | — | Done, PR #48 | — |
 | 5 | **Refresh the release documents.** | Code | 3 | Done, PR #47 | — |
-| 6 | **DSA.** In Business › Agreements › Compliance, declare "I'm not a trader under the DSA". Change it if the app later earns money. | Owner | 2 | Started on November 8, 2026. Final state: not known | The status shows "non-trader". |
+| 6 | **DSA.** In Business › Agreements › Compliance, declare "I'm not a trader under the DSA". Change it if the app later earns money. | Owner | 2 | Done. Business › Compliance shows the Digital Services Act as Active for 27 countries or regions, updated on November 8, 2026. | — |
 | 7 | **Simulator check and store screenshots.** Do a clean install on iPhone 18 Pro, a run with data on iPhone 18 Pro Max, the watch on Series 12 (46 mm), and one Arabic and one Japanese run. Then take the English screenshots: iPhone 18 Pro (1206 × 2622), iPhone 18 Pro Max (1320 × 2868), and the watch (416 × 496). Use a Release build, or a Debug build without the Settings screen (N10). | Code | 1, 4 | Open. The old images in the session notes (October 14) show the old icon. Do not use them. | The PNG files are in the session notes, outside Git. |
 | 8 | **Identifiers.** The App Group `group.com.migratrack.app`, and the App IDs `com.migratrack.app` (HealthKit), `com.migratrack.app.watchkitapp` (App Groups) and `com.migratrack.app.watchkitapp.complications` (App Groups). | Owner | 2 | Done. Automatic signing registered them for PR #49. | — |
 | 9 | **Signing and TestFlight.** Archive `main` in Xcode. Open **Generate Privacy Report**. In Organizer, select Distribute App › App Store Connect. Xcode makes the Distribution certificate on the first upload. Install the build from TestFlight on an iPhone with a paired Apple Watch. Do the review notes of APP_STORE.md as a test. | Owner | 2, 8, 10 | `TEAM_ID` done (PR #49). Upload: not done | TestFlight shows the build as "Ready to Test". |
