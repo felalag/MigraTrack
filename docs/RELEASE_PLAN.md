@@ -113,6 +113,7 @@ The section "Remaining before release" of October 16, 2026 was never committed. 
 - **N14. The iPhone app has no App Group.** Only the watch app and the complications share the database ([MigraTrackWatch.entitlements](../iosApp/watchApp/MigraTrackWatch.entitlements)). The iPhone App ID needs HealthKit, and no App Group. Step 8 now says this.
 - **N15. The new age rating questions are not in App Store Connect before November 16, 2026.** If you answer the questionnaire before that date, open it again after November 16 and answer the two new questions. The deadline is January 12, 2027.
 - **N16. The name "MigraTrack" is reserved.** On November 14, 2026, App Store Connect refused the name "MigraTrack", because another developer has an app record with it. No storefront of 24 that the iTunes Search API checked has a published app with this name. The owner created the record as "MigraTrack: Migraine Diary". [APP_STORE.md](APP_STORE.md#app-information) and the 46 files in [app-store](app-store/) use this name. The Home Screen still shows "MigraTrack".
+- **N17. The repository name had a typo.** The repository was `felalag/MirgaTrack`, so the website was `felalag.github.io/MirgaTrack/`. On November 14, 2026, the repository became `felalag/MigraTrack`. The website is now `https://felalag.github.io/MigraTrack/`, and the old address returns HTTP 404. The app binary contains no website address. Git and the GitHub API redirect the old repository name.
 
 ## 3. Apple requirements on November 8, 2026
 

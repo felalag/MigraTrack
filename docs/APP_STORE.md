@@ -16,9 +16,9 @@ The requirements were checked against the Apple sources in [Sources](#sources) o
 
 | Field | URL |
 |---|---|
-| Privacy Policy URL (required) | https://felalag.github.io/MirgaTrack/privacy/ |
-| Support URL (required) | https://felalag.github.io/MirgaTrack/support/ |
-| Marketing URL (optional) | https://felalag.github.io/MirgaTrack/ |
+| Privacy Policy URL (required) | https://felalag.github.io/MigraTrack/privacy/ |
+| Support URL (required) | https://felalag.github.io/MigraTrack/support/ |
+| Marketing URL (optional) | https://felalag.github.io/MigraTrack/ |
 
 The app and the website show the same legal text. The Markdown files in `docs/legal/files/` are the only copy: the app bundles them as Compose resources, and GitHub Pages publishes them.
 The Support URL must lead to contact information, so the support page shows an email address.

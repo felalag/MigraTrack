@@ -8,7 +8,7 @@ App Store Connect localization "Italian". The English source and the field limit
 |---|---|---|---|
 | Name | MigraTrack: Migraine Diary | 26 characters | 30 characters |
 | Subtitle | Diario dell’emicrania e report | 30 characters | 30 characters |
-| Privacy Policy URL | https://felalag.github.io/MirgaTrack/privacy/ (the English page, plan section 4.2) | | |
+| Privacy Policy URL | https://felalag.github.io/MigraTrack/privacy/ (the English page, plan section 4.2) | | |
 
 ## Version information
 

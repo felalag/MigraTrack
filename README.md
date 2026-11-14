@@ -132,7 +132,7 @@ The first designs showed the pain-free days in rings like the Apple Activity rin
 - **A doctor reminder under Log Migraine Episode and under the button of the last onboarding step**: "MigraTrack is a diary, not medical advice." It follows guideline 1.4.1. Onboarding also does not say "calibrate": step 2 is "Your Triggers".
 - **The Summary tab has a calendar icon.**
 
-The welcome screen comes from a design of the project owner. It follows `sign_in_registration` of the first Stitch export, but has one **Get Started** button in place of "Continue with Apple" and "Continue with Google". The app has no accounts for now; [the auth and sync proposal](https://github.com/felalag/MirgaTrack/pull/5) gives the reasons.
+The welcome screen comes from a design of the project owner. It follows `sign_in_registration` of the first Stitch export, but has one **Get Started** button in place of "Continue with Apple" and "Continue with Google". The app has no accounts for now; [the auth and sync proposal](https://github.com/felalag/MigraTrack/pull/5) gives the reasons.
 
 - **Get Started is the pink primary button.** The design draws it white, but every other main action in the app uses the pink pill of the specification.
 - **The card is an example of the Summary card,** with the same 30-day strip and an "Example" label. The headline says "Bring the facts to your doctor." and promises no prediction.

@@ -10,7 +10,7 @@ The text is the French text with the Quebec conventions: no space before ? ! ; (
 |---|---|---|---|
 | Name | MigraTrack: Migraine Diary | 26 characters | 30 characters |
 | Subtitle | Journal de migraine, rapports | 29 characters | 30 characters |
-| Privacy Policy URL | https://felalag.github.io/MirgaTrack/privacy/ (the English page, plan section 4.2) | | |
+| Privacy Policy URL | https://felalag.github.io/MigraTrack/privacy/ (the English page, plan section 4.2) | | |
 
 ## Version information
 
