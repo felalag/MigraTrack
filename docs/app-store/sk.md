@@ -6,7 +6,7 @@ App Store Connect localization "Slovak". The English source and the field limits
 
 | Field | Value | Count | Limit |
 |---|---|---|---|
-| Name | MigraTrack | 10 characters | 30 characters |
+| Name | MigraTrack: Migraine Diary | 26 characters | 30 characters |
 | Subtitle | Denník migrény a správy | 23 characters | 30 characters |
 | Privacy Policy URL | https://felalag.github.io/MirgaTrack/privacy/ (the English page, plan section 4.2) | | |
 

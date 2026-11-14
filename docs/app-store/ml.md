@@ -6,7 +6,7 @@ App Store Connect localization "Malayalam". The English source and the field lim
 
 | Field | Value | Count | Limit |
 |---|---|---|---|
-| Name | MigraTrack | 10 characters | 30 characters |
+| Name | MigraTrack: Migraine Diary | 26 characters | 30 characters |
 | Subtitle | മൈഗ്രേൻ ഡയറിയും റിപ്പോർട്ടും | 28 characters | 30 characters |
 | Privacy Policy URL | https://felalag.github.io/MirgaTrack/privacy/ (the English page, plan section 4.2) | | |
 
