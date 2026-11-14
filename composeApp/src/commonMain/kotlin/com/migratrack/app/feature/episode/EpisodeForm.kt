@@ -41,6 +41,7 @@ import com.migratrack.app.ui.components.Card
 import com.migratrack.app.ui.components.MedicationCard
 import com.migratrack.app.ui.components.MtText
 import com.migratrack.app.ui.components.PainScale
+import com.migratrack.app.ui.components.Panes
 import com.migratrack.app.ui.components.RegionOption
 import com.migratrack.app.ui.components.SelectableCapsule
 import com.migratrack.app.ui.components.TextAction
@@ -65,8 +66,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-/** The cards of the Log Episode and Edit Episode screens, without the buttons under them. */
-@OptIn(ExperimentalLayoutApi::class)
+/**
+ * The cards of the Log Episode and Edit Episode screens, then the screen's [actions].
+ * In a wide page the pain cards and the details stand side by side, and the actions end the details.
+ */
 @Composable
 fun ColumnScope.EpisodeFormFields(
     draft: EpisodeDraft,
@@ -74,7 +77,19 @@ fun ColumnScope.EpisodeFormFields(
     viewModel: EpisodeFormViewModel,
     today: LocalDate,
     timeZone: TimeZone,
+    actions: @Composable ColumnScope.() -> Unit,
 ) {
+    Panes(
+        start = { PainFields(draft, viewModel) },
+        end = {
+            DetailFields(draft, baselineTriggers, viewModel, today, timeZone)
+            actions()
+        },
+    )
+}
+
+@Composable
+private fun PainFields(draft: EpisodeDraft, viewModel: EpisodeFormViewModel) {
     Card(bordered = true, contentPadding = PaddingValues(MtSpacing.screen)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Symbols.E911Emergency, tint = MtColors.BrandLabel, size = 20.dp)
@@ -96,6 +111,17 @@ fun ColumnScope.EpisodeFormFields(
         }
     }
 
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ColumnScope.DetailFields(
+    draft: EpisodeDraft,
+    baselineTriggers: List<Trigger>,
+    viewModel: EpisodeFormViewModel,
+    today: LocalDate,
+    timeZone: TimeZone,
+) {
     FormSection(stringResource(Res.string.episode_aura_symptoms), Symbols.Sensors, MtColors.Cyan, onClear = viewModel::clearSymptoms) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(MtSpacing.sm), verticalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
             Symptom.entries.forEach { symptom ->

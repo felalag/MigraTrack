@@ -43,24 +43,25 @@ fun EpisodeEditorScreen(target: EpisodeTarget, onBack: () -> Unit, onDone: (mess
         if (state.missing) onBack()
     }
 
-    Page(title = stringResource(if (editing) Res.string.common_edit_episode else Res.string.episode_log_title), onBack = onBack) {
+    Page(title = stringResource(if (editing) Res.string.common_edit_episode else Res.string.episode_log_title), onBack = onBack, panes = true) {
         val draft = state.draft ?: return@Page
-        EpisodeFormFields(draft, state.baselineTriggers, viewModel, graph.today(), graph.timeZone())
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            PrimaryButton(
-                text = stringResource(if (editing) Res.string.episode_update else Res.string.common_save_episode),
-                icon = Symbols.Save,
-                enabled = !state.saving,
-                height = 56.dp,
-                onClick = {
-                    haptics.performHapticFeedback(HapticFeedbackType.Confirm)
-                    viewModel.save { onDone(if (editing) Res.string.episode_updated_banner else Res.string.episode_saved_banner) }
-                },
-            )
-            if (editing) {
-                DestructiveButton(stringResource(Res.string.common_delete_episode), enabled = !state.saving, onClick = {
-                    viewModel.delete { onDone(Res.string.episode_deleted_banner) }
-                })
+        EpisodeFormFields(draft, state.baselineTriggers, viewModel, graph.today(), graph.timeZone()) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                PrimaryButton(
+                    text = stringResource(if (editing) Res.string.episode_update else Res.string.common_save_episode),
+                    icon = Symbols.Save,
+                    enabled = !state.saving,
+                    height = 56.dp,
+                    onClick = {
+                        haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+                        viewModel.save { onDone(if (editing) Res.string.episode_updated_banner else Res.string.episode_saved_banner) }
+                    },
+                )
+                if (editing) {
+                    DestructiveButton(stringResource(Res.string.common_delete_episode), enabled = !state.saving, onClick = {
+                        viewModel.delete { onDone(Res.string.episode_deleted_banner) }
+                    })
+                }
             }
         }
     }

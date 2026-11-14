@@ -197,16 +197,16 @@ Upload PNG or JPEG files without transparency, 1 to 10 for each size. Screenshot
 | iPhone with Dynamic Island, large display | iPhone 18 Pro Max | 1320 × 2868 | Recommended: without it, App Store Connect requires the 6.5-inch Face ID set (1284 × 2778 or 1242 × 2688) |
 | iPad 13-inch | — | — | Not needed: the app is for iPhone only |
 | Apple Watch | Apple Watch Series 12 (46mm) | 416 × 496 | Required for a watch app; use this size in all localizations |
-| iPhone Duo, outer display | iPhone Duo (iOS 27.1 or later), closed | 1398 × 2034 | Optional now. Required from April 2027 for apps built with the iOS 27.1 SDK or later |
-| iPhone Duo, inner display | iPhone Duo (iOS 27.1 or later), open | 2007 × 2853 | Optional now. Required from April 2027 for apps built with the iOS 27.1 SDK or later |
+| iPhone Duo, outer display | iPhone Duo (iOS 27.1 or later), closed | 1398 × 2034 | Optional now. Required for every submission from April 2027 |
+| iPhone Duo, inner display | iPhone Duo (iOS 27.1 or later), open | 2853 × 2007 (landscape) or 2007 × 2853 | Optional now. Required for every submission from April 2027 |
 
-With iPhone Duo screenshots, the product page shows a badge that says that the app is optimized for iPhone Duo ([Prepare for iPhone Duo](https://developer.apple.com/iphone-duo/prepare/)). They are optional for 1.0. The first update after April 2027 needs them, because Xcode 27.2 builds with a later SDK than iOS 27.1.
+With iPhone Duo screenshots, the product page shows a badge that says that the app is optimized for iPhone Duo ([Prepare for iPhone Duo](https://developer.apple.com/iphone-duo/prepare/)). They are optional for 1.0. From April 2027, "any apps or games submitted" need them ([Prepare and submit your apps for iPhone Duo](https://developer.apple.com/news/?id=kkphp5qo), October 5, 2026). The open device shows the app in landscape, so use the landscape size for the inner display. `scripts/l10n-screenshots.sh` captures one display when `SIM_DISPLAY` names it.
 
 The Apple Watch Series 12 (42mm) simulator makes 374 × 446 pixels, which App Store Connect does not accept. Use the 46mm watch, or the Ultra 4 at 422 × 514.
 
 Use the same set of screens on each iPhone size. Load Settings › Developer › Load Sample Data in a Debug build first, so the charts have data.
 
-Do not take a screenshot of Settings from a Debug build. A Debug build shows the Developer section in Settings ([SettingsScreen.kt:201](../composeApp/src/commonMain/kotlin/com/migratrack/app/feature/settings/SettingsScreen.kt#L201)), and the Release build does not. Screenshots must show the app that users get (guideline 2.3.3). In a store image, the Developer section looks like a hidden feature, which guideline 2.5.19 forbids.
+Do not take a screenshot of Settings from a Debug build. A Debug build shows the Developer section in Settings ([SettingsScreen.kt:204](../composeApp/src/commonMain/kotlin/com/migratrack/app/feature/settings/SettingsScreen.kt#L204)), and the Release build does not. Screenshots must show the app that users get (guideline 2.3.3). In a store image, the Developer section looks like a hidden feature, which guideline 2.5.19 forbids.
 
 | # | iPhone screen | What it shows |
 |---|---|---|

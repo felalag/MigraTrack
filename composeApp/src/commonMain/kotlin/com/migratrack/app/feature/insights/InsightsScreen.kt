@@ -81,6 +81,7 @@ import com.migratrack.app.ui.components.Card
 import com.migratrack.app.ui.components.Dot
 import com.migratrack.app.ui.components.MtText
 import com.migratrack.app.ui.components.Page
+import com.migratrack.app.ui.components.Panes
 import com.migratrack.app.ui.components.SegmentedControl
 import com.migratrack.app.ui.components.glow
 import com.migratrack.app.ui.components.pressable
@@ -118,29 +119,30 @@ fun InsightsScreen(
     val viewModel = viewModel { InsightsViewModel(graph) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Page(title = stringResource(Res.string.tab_insights), onSettings = onOpenSettings) {
+    Page(title = stringResource(Res.string.tab_insights), onSettings = onOpenSettings, panes = true) {
         val current = state ?: return@Page
         val periodLabels = InsightsPeriod.entries.associateWith { stringResource(it.shortLabel) }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            SegmentedControl(
-                options = InsightsPeriod.entries,
-                selected = current.period,
-                label = { periodLabels.getValue(it) },
-                onSelect = viewModel::selectPeriod,
-                modifier = Modifier.weight(1f),
-            )
-            Spacer(Modifier.width(MtSpacing.sm))
-            MonthPill(current.insights.month, current.calendarOpen, onClick = viewModel::toggleCalendar)
-        }
-        Column {
-            AttackCard(current.insights)
-            AnimatedVisibility(
-                visible = current.calendarOpen,
-                enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
-                exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
-            ) {
-                Column {
-                    Spacer(Modifier.height(MtSpacing.lg))
+        Panes(
+            start = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    SegmentedControl(
+                        options = InsightsPeriod.entries,
+                        selected = current.period,
+                        label = { periodLabels.getValue(it) },
+                        onSelect = viewModel::selectPeriod,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Spacer(Modifier.width(MtSpacing.sm))
+                    MonthPill(current.insights.month, current.calendarOpen, onClick = viewModel::toggleCalendar)
+                }
+                AttackCard(current.insights)
+            },
+            end = {
+                AnimatedVisibility(
+                    visible = current.calendarOpen,
+                    enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+                    exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
+                ) {
                     CalendarCard(
                         calendar = current.calendar,
                         selected = current.selected,
@@ -155,9 +157,9 @@ fun InsightsScreen(
                         onLog = onLogOn,
                     )
                 }
-            }
-        }
-        if (current.insights.attackCount > 0) TriggerCard(current.insights.triggers, current.triggerCatalog)
+                if (current.insights.attackCount > 0) TriggerCard(current.insights.triggers, current.triggerCatalog)
+            },
+        )
     }
 }
 

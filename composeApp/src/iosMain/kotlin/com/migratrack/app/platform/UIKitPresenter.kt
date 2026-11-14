@@ -4,8 +4,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import platform.CoreGraphics.CGRectMake
 import platform.UIKit.UIApplication
-import platform.UIKit.UIDevice
-import platform.UIKit.UIUserInterfaceIdiomPad
+import platform.UIKit.UIUserInterfaceSizeClassRegular
 import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 import platform.UIKit.UIWindowScene
@@ -23,14 +22,21 @@ internal fun topViewController(): UIViewController? {
 }
 
 /**
- * iPad shows sheets as popovers and raises an exception without an anchor.
- * iPhone gets no anchor: since iOS 26 an anchored action sheet becomes a popover there too, instead of rising from the bottom.
+ * A regular-width window, such as the inner display of iPhone Duo, shows action sheets and the share sheet as popovers.
+ * They point at the last touch, which is on the control that opened them; with a sheet on top, they open centered.
+ * A compact window gets no anchor: since iOS 26 an anchored action sheet becomes a popover there too.
  */
 @OptIn(ExperimentalForeignApi::class)
 internal fun UIViewController.anchorPopover(host: UIViewController) {
-    if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPad) return
+    if (host.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClassRegular) return
     val popover = popoverPresentationController ?: return
-    popover.sourceView = host.view
-    popover.sourceRect = host.view.bounds.useContents { CGRectMake(size.width / 2, size.height / 2, 0.0, 0.0) }
-    popover.permittedArrowDirections = 0uL
+    val window = host.view.window ?: return
+    val touch = LastTouch.point?.takeIf { host.presentingViewController == null }
+    popover.sourceView = window
+    if (touch != null) {
+        popover.sourceRect = CGRectMake(touch.x.toDouble(), touch.y.toDouble(), 1.0, 1.0)
+    } else {
+        popover.sourceRect = window.bounds.useContents { CGRectMake(size.width / 2, size.height / 2, 0.0, 0.0) }
+        popover.permittedArrowDirections = 0uL
+    }
 }

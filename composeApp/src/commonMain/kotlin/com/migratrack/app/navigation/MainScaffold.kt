@@ -7,16 +7,15 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -28,9 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
@@ -53,6 +52,7 @@ import com.migratrack.app.generated.resources.Res
 import com.migratrack.app.generated.resources.episode_saved_banner
 import com.migratrack.app.ui.components.Banner
 import com.migratrack.app.ui.components.LocalBottomBarInset
+import com.migratrack.app.ui.components.LocalHostWindow
 import com.migratrack.app.ui.components.Tab
 import com.migratrack.app.ui.components.TabBar
 import com.migratrack.app.ui.components.TabBarHeight
@@ -91,7 +91,6 @@ data class EpisodeRoute(val episodeId: String? = null, val date: String? = null)
  * Tabs with a shared push stack, as a UITabBarController hosting navigation controllers.
  * The tab bar floats over the NavHost, so a pushed screen slides in under it and the
  * system edge swipe pops it. Baseline editors hide the bar, like hidesBottomBarWhenPushed.
- * In a window wider than tall the bar is a [TabRail] beside the NavHost instead.
  */
 @Composable
 fun MainScaffold() {
@@ -101,8 +100,6 @@ fun MainScaffold() {
     var banner by remember { mutableStateOf<StringResource?>(null) }
     val entry by navController.currentBackStackEntryAsState()
     val tabBarVisible = entry?.destination?.hasRoute<EditBaselineRoute>() != true
-    val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val endInset = WindowInsets.safeDrawing.asPaddingValues().calculateEndPadding(LocalLayoutDirection.current)
 
     LaunchedEffect(Unit) {
         if (startScreen == "Settings") navController.navigate(SettingsRoute)
@@ -115,62 +112,81 @@ fun MainScaffold() {
         }
     }
 
-    BoxWithConstraints(Modifier.fillMaxSize()) {
-        val useRail = maxWidth > maxHeight
-        val railSpace = maxOf(TabRailWidth, endInset)
-        val railWidth = if (useRail && tabBarVisible) railSpace else 0.dp
-        val bottomBarInset = if (!useRail && tabBarVisible) TabBarHeight + bottomInset else 0.dp
-        val railInsets = PaddingValues(end = railWidth)
-        val selectTab: (Tab) -> Unit = { tab ->
+    TabFrame(
+        selected = selectedTab,
+        onSelect = { tab ->
             selectedTab = tab
             navController.popBackStack(MainRoute, inclusive = false)
+        },
+        tabBarVisible = tabBarVisible,
+        banner = banner?.let { stringResource(it) },
+    ) {
+        NavHost(navController, startDestination = MainRoute) {
+            composable<MainRoute> { backStackEntry ->
+                TabContent(
+                    tab = selectedTab,
+                    openSettings = { navController.navigateFrom(backStackEntry, SettingsRoute) },
+                    openLog = { selectedTab = Tab.Log },
+                    openEpisode = { route -> navController.navigateFrom(backStackEntry, route) },
+                    onEpisodeSaved = {
+                        selectedTab = Tab.Summary
+                        banner = Res.string.episode_saved_banner
+                    },
+                )
+            }
+            composable<EpisodeRoute> { backStackEntry ->
+                EpisodeEditorScreen(
+                    target = backStackEntry.toRoute<EpisodeRoute>().target(),
+                    onBack = { navController.popFrom(backStackEntry) },
+                    onDone = { message ->
+                        navController.popFrom(backStackEntry)
+                        banner = message
+                    },
+                )
+            }
+            composable<SettingsRoute> { backStackEntry ->
+                SettingsScreen(
+                    onBack = { navController.popFrom(backStackEntry) },
+                    onEditBaseline = { step -> navController.navigateFrom(backStackEntry, EditBaselineRoute(step)) },
+                    onOpenDocument = { document -> navController.navigateFrom(backStackEntry, LegalRoute(document.name)) },
+                )
+            }
+            composable<LegalRoute> { backStackEntry ->
+                LegalScreen(LegalDocument.valueOf(backStackEntry.toRoute<LegalRoute>().document), onBack = { navController.popFrom(backStackEntry) })
+            }
+            composable<EditBaselineRoute> { backStackEntry ->
+                BaselineEditor(
+                    step = backStackEntry.toRoute<EditBaselineRoute>().step,
+                    onClose = { navController.popFrom(backStackEntry) },
+                )
+            }
         }
+    }
+}
+
+/**
+ * The tab bar around [content], and the confirmation [banner] over it.
+ * Where the status bar is a column on the right edge, as on iPhone Duo, the bar is a [TabRail] under it instead.
+ */
+@Composable
+internal fun TabFrame(
+    selected: Tab,
+    onSelect: (Tab) -> Unit,
+    tabBarVisible: Boolean,
+    banner: String?,
+    content: @Composable () -> Unit,
+) {
+    val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val statusBarColumn = LocalHostWindow.current.statusBarColumn
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val useRail = statusBarColumn != null
+        val railSpace = maxOf(TabRailWidth, maxWidth - (statusBarColumn?.left ?: maxWidth))
+        val railWidth = if (useRail && tabBarVisible) railSpace else 0.dp
+        val bottomBarInset = if (!useRail && tabBarVisible) TabBarHeight + bottomInset else 0.dp
+        val railInsets = PaddingValues.Absolute(right = railWidth)
 
         CompositionLocalProvider(LocalBottomBarInset provides bottomBarInset) {
-            NavHost(
-                navController,
-                startDestination = MainRoute,
-                modifier = Modifier.padding(railInsets).consumeWindowInsets(railInsets),
-            ) {
-                composable<MainRoute> { backStackEntry ->
-                    TabContent(
-                        tab = selectedTab,
-                        openSettings = { navController.navigateFrom(backStackEntry, SettingsRoute) },
-                        openLog = { selectedTab = Tab.Log },
-                        openEpisode = { route -> navController.navigateFrom(backStackEntry, route) },
-                        onEpisodeSaved = {
-                            selectedTab = Tab.Summary
-                            banner = Res.string.episode_saved_banner
-                        },
-                    )
-                }
-                composable<EpisodeRoute> { backStackEntry ->
-                    EpisodeEditorScreen(
-                        target = backStackEntry.toRoute<EpisodeRoute>().target(),
-                        onBack = { navController.popFrom(backStackEntry) },
-                        onDone = { message ->
-                            navController.popFrom(backStackEntry)
-                            banner = message
-                        },
-                    )
-                }
-                composable<SettingsRoute> { backStackEntry ->
-                    SettingsScreen(
-                        onBack = { navController.popFrom(backStackEntry) },
-                        onEditBaseline = { step -> navController.navigateFrom(backStackEntry, EditBaselineRoute(step)) },
-                        onOpenDocument = { document -> navController.navigateFrom(backStackEntry, LegalRoute(document.name)) },
-                    )
-                }
-                composable<LegalRoute> { backStackEntry ->
-                    LegalScreen(LegalDocument.valueOf(backStackEntry.toRoute<LegalRoute>().document), onBack = { navController.popFrom(backStackEntry) })
-                }
-                composable<EditBaselineRoute> { backStackEntry ->
-                    BaselineEditor(
-                        step = backStackEntry.toRoute<EditBaselineRoute>().step,
-                        onClose = { navController.popFrom(backStackEntry) },
-                    )
-                }
-            }
+            Box(Modifier.padding(railInsets).consumeWindowInsets(railInsets)) { content() }
         }
 
         AnimatedVisibility(
@@ -179,16 +195,16 @@ fun MainScaffold() {
             exit = slideOutVertically { it },
             modifier = Modifier.align(Alignment.BottomCenter),
         ) {
-            TabBar(selected = selectedTab, onSelect = selectTab)
+            TabBar(selected = selected, onSelect = onSelect)
         }
 
         AnimatedVisibility(
             visible = tabBarVisible && useRail,
             enter = slideInHorizontally { it },
             exit = slideOutHorizontally { it },
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier.align(AbsoluteAlignment.CenterRight),
         ) {
-            TabRail(selected = selectedTab, onSelect = selectTab, modifier = Modifier.width(railSpace))
+            TabRail(selected = selected, onSelect = onSelect, modifier = Modifier.width(railSpace))
         }
 
         AnimatedVisibility(
@@ -200,7 +216,7 @@ fun MainScaffold() {
                 .consumeWindowInsets(railInsets)
                 .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 8.dp),
         ) {
-            Banner(banner?.let { stringResource(it) }.orEmpty(), Symbols.CheckCircle, MtColors.Cyan)
+            Banner(banner.orEmpty(), Symbols.CheckCircle, MtColors.Cyan)
         }
     }
 }

@@ -7,11 +7,14 @@
 # Install a Debug build first: the start screen comes from a launch argument that only Debug builds read.
 # For the pseudo-locales, build it with MIGRATRACK_PSEUDO=true. Set WATCH=<watch-udid> to add the watch summary;
 # the watch shows the pseudo-locales only through the Xcode scheme option App Language.
+# iPhone Duo has two displays: set SIM_DISPLAY=<port UUID from `xcrun simctl io <udid> enumerate`> to capture the lit one.
 set -euo pipefail
 
 udid=$1 out=$2
 shift 2
 screens=(Summary Log Insights Export Settings)
+display=()
+[[ -n ${SIM_DISPLAY:-} ]] && display=(--display "$SIM_DISPLAY")
 xcrun simctl status_bar "$udid" override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
 # The watchOS 27 simulator does not support status bar overrides; the watch screenshot then shows the real time.
 [[ -n ${WATCH:-} ]] && { xcrun simctl status_bar "$WATCH" override --time 9:41 2>/dev/null || true; }
@@ -29,7 +32,7 @@ for spec in "$@"; do
     xcrun simctl terminate "$udid" com.migratrack.app 2>/dev/null || true
     xcrun simctl launch "$udid" com.migratrack.app -AppleLanguages "($language)" -AppleLocale "$locale" $direction -MigraTrackScreen "$screen" >/dev/null
     sleep 3
-    xcrun simctl io "$udid" screenshot "$out/$language/$screen.png" >/dev/null 2>&1
+    xcrun simctl io "$udid" screenshot $display "$out/$language/$screen.png" >/dev/null 2>&1
   done
   if [[ -n ${WATCH:-} ]]; then
     xcrun simctl terminate "$WATCH" com.migratrack.app.watchkitapp 2>/dev/null || true

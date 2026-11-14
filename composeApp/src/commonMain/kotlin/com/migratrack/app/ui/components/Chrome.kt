@@ -1,6 +1,17 @@
 package com.migratrack.app.ui.components
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -69,25 +80,25 @@ import org.jetbrains.compose.resources.StringResource
 val HeaderHeight = 64.dp
 val TabBarHeight = 60.dp
 
-/** Width of the [TabRail]. On iPhone Duo the rail fills the 84 pt safe-area column under the status bar. */
+/** Narrowest [TabRail]. On iPhone Duo the rail fills the 84 pt column under the status bar. */
 val TabRailWidth = 84.dp
 
 /** Space the floating tab bar takes at the bottom of the current screen; zero where it is hidden. */
 val LocalBottomBarInset = compositionLocalOf { 0.dp }
 
-/** Widest a screen's column grows, side margins included. Only the inner display of iPhone Duo is wider. */
+/** Widest a single column grows, side margins included. Only the inner display of iPhone Duo is wider. */
 val MaxContentWidth = 520.dp
 
 /**
- * Centers a column no wider than [MaxContentWidth] and keeps it out of the side safe areas.
+ * Centers a column no wider than [maxWidth] and keeps it out of the side safe areas.
  * On iPhone Duo the status bar is on the right edge, and only `safeDrawing` reports it.
  */
 @Composable
-fun Modifier.contentColumn(): Modifier = this
+fun Modifier.contentColumn(maxWidth: Dp = MaxContentWidth): Modifier = this
     .fillMaxWidth()
     .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
     .wrapContentWidth()
-    .widthIn(max = MaxContentWidth)
+    .widthIn(max = maxWidth)
     .fillMaxWidth()
 
 /** "MIGRATRACK / Summary" header with the brain mark, or a back button on pushed screens. */
@@ -152,6 +163,7 @@ fun BrandHeader(
 /**
  * A scrolling page under a fixed header, padded for the status bar and the tab bar.
  * Content scrolls beneath the header as it does under a UINavigationBar.
+ * With [panes], a wide page of regular width grows to [MaxTwoPaneWidth] and shows the content's [Panes] side by side.
  */
 @Composable
 fun Page(
@@ -161,35 +173,66 @@ fun Page(
     onSettings: (() -> Unit)? = null,
     scrollState: ScrollState = rememberScrollState(),
     spacing: Dp = MtSpacing.lg,
+    panes: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val bottom = maxOf(LocalBottomBarInset.current, WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
-    Box(modifier.fillMaxSize().background(MtColors.Canvas)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(top = top + HeaderHeight + MtSpacing.xs, bottom = bottom + MtSpacing.lg)
-                .contentColumn()
-                .padding(horizontal = MtSpacing.screen),
-            verticalArrangement = Arrangement.spacedBy(spacing),
-            content = content,
-        )
+    val density = LocalDensity.current
+    val window = LocalHostWindow.current
+    val fold = window.fold
+    var pageLeft by remember { mutableStateOf(0.dp) }
+    BoxWithConstraints(
+        modifier.fillMaxSize().background(MtColors.Canvas).onPlaced { pageLeft = with(density) { it.positionInRoot().x.toDp() } },
+    ) {
+        val twoPanes = panes && window.regularWidth && maxWidth >= TwoPaneMinWidth
+        val columnWidth = if (twoPanes) MaxTwoPaneWidth else MaxContentWidth
+        val side = if (twoPanes) Modifier else Modifier.besideFold(fold, pageLeft, maxWidth)
+        CompositionLocalProvider(LocalTwoPanes provides twoPanes) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(top = top + HeaderHeight + MtSpacing.xs, bottom = bottom + MtSpacing.lg)
+                    .then(side)
+                    .contentColumn(columnWidth)
+                    .padding(horizontal = MtSpacing.screen),
+                verticalArrangement = Arrangement.spacedBy(spacing),
+                content = content,
+            )
+        }
         BrandHeader(
             title = title,
             onBack = onBack,
             onSettings = onSettings,
-            modifier = Modifier.background(MtColors.Canvas).padding(top = top).contentColumn(),
+            modifier = Modifier.background(MtColors.Canvas).padding(top = top).then(side).contentColumn(columnWidth),
         )
     }
 }
 
-enum class Tab(val title: StringResource, val icon: ImageVector) {
-    Summary(Res.string.tab_summary, Symbols.CalendarMonth),
-    Log(Res.string.tab_log, AppIcons.TabLog),
-    Insights(Res.string.tab_insights, AppIcons.TabInsights),
-    Export(Res.string.tab_export, AppIcons.TabExport),
+/** Moves a single column to the wider side of the fold, so that no control lies across it. */
+private fun Modifier.besideFold(fold: VerticalBand?, pageLeft: Dp, pageWidth: Dp): Modifier {
+    val padding = foldPadding(fold, pageLeft, pageWidth) ?: return this
+    return absolutePadding(left = padding.left, right = padding.right)
+}
+
+internal data class SidePadding(val left: Dp, val right: Dp)
+
+/** The fold is physical, so the padding is absolute in right-to-left languages too. Null when the fold misses the page. */
+internal fun foldPadding(fold: VerticalBand?, pageLeft: Dp, pageWidth: Dp): SidePadding? {
+    if (fold == null) return null
+    val left = fold.left - pageLeft
+    val right = fold.right - pageLeft
+    if (right <= 0.dp || left >= pageWidth) return null
+    return if (left >= pageWidth - right) SidePadding(0.dp, pageWidth - left) else SidePadding(right, 0.dp)
+}
+
+/** [symbol] is the SF Symbol closest to [icon], for the Large Content Viewer. */
+enum class Tab(val title: StringResource, val icon: ImageVector, val symbol: String) {
+    Summary(Res.string.tab_summary, Symbols.CalendarMonth, "calendar"),
+    Log(Res.string.tab_log, AppIcons.TabLog, "plus.circle"),
+    Insights(Res.string.tab_insights, AppIcons.TabInsights, "waveform.path.ecg"),
+    Export(Res.string.tab_export, AppIcons.TabExport, "square.and.arrow.up"),
 }
 
 @Composable
@@ -211,21 +254,22 @@ fun TabBar(selected: Tab, onSelect: (Tab) -> Unit, modifier: Modifier = Modifier
 }
 
 /**
- * The tab bar as a column on the trailing edge, for windows wider than tall: the inner display of iPhone Duo.
+ * The tab bar as a column under the status bar, where iPhone Duo shows the status bar on the right edge.
  * iOS 27.1 shows system tab bars there vertically below the status bar, so the items are centered to stay clear of it.
+ * The status bar stays on the right in right-to-left languages, so the rail and its separator do too.
  */
 @Composable
 fun TabRail(selected: Tab, onSelect: (Tab) -> Unit, modifier: Modifier = Modifier) {
-    Row(modifier.fillMaxHeight().background(MtColors.Canvas)) {
-        Box(Modifier.fillMaxHeight().width(0.5.dp).background(Color.White.copy(alpha = 0.1f)))
+    Box(modifier.fillMaxHeight().background(MtColors.Canvas)) {
         Column(
-            modifier = Modifier.fillMaxHeight().weight(1f),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(MtSpacing.sm, Alignment.CenterVertically),
         ) {
             Tab.entries.forEach { tab ->
                 TabItem(tab, active = tab == selected, onSelect = onSelect, modifier = Modifier.fillMaxWidth().height(TabBarHeight))
             }
         }
+        Box(Modifier.align(AbsoluteAlignment.CenterLeft).fillMaxHeight().width(0.5.dp).background(Color.White.copy(alpha = 0.1f)))
     }
 }
 
@@ -234,6 +278,7 @@ private fun TabItem(tab: Tab, active: Boolean, onSelect: (Tab) -> Unit, modifier
     val color = if (active) MtColors.Pink else MtColors.TextSecondary
     Column(
         modifier = modifier
+            .largeContentItem(stringResource(tab.title), tab.symbol) { onSelect(tab) }
             .semantics { this.selected = active }
             .pressable(role = Role.Tab, pressedScale = 0.92f) { onSelect(tab) },
         horizontalAlignment = Alignment.CenterHorizontally,
