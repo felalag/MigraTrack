@@ -139,7 +139,7 @@ The section "Remaining before release" of October 16, 2026 was never committed. 
 |---|---|---|---|
 | B1 | Upload of a signed build to TestFlight | Owner | 9 |
 | B2 | Store screenshots | Code takes them, owner uploads them | 7, 13 |
-| B3 | App Store Connect forms, with the new age rating questions | Owner | 10–19 |
+| B3 | App Store Connect forms, with the new age rating questions | Owner | 11–14, 18, 19 |
 | N13 | This file is not in `main` | Code, then the owner merges | 22 |
 
 ## 5. Step-by-step plan
@@ -161,13 +161,13 @@ Do the steps in this order. A step can start when the steps in its "Needs" colum
 | 11 | **App information.** Subtitle "Headache Log & Doctor Reports", categories (Health & Fitness, Medical), Privacy Policy URL, Support URL, copyright, description, keywords, promotional text from [APP_STORE.md](APP_STORE.md). | Owner | 10 | App Information done on November 14, 2026. The fields of version 1.0: not known | The English (U.S.) page is complete. |
 | 12 | **Localizations.** Add the 46 localizations that have a file in [app-store](app-store/). Copy the fields from the file. The name is "MigraTrack: Migraine Diary" in each localization. | Owner | 11 | Not known | Each added localization has a name, subtitle, description and keywords. |
 | 13 | **Screenshots.** Upload the English sets of step 7. The other localizations take them. | Owner | 7, 10 | Open | The iPhone and watch sets show no warning. |
-| 14 | **Age rating.** Answer the questionnaire from APP_STORE.md, with "No" for Social Media, Shared Location, and Dating and Relationships (N8, N15). | Owner | 10 | Not known | The result is 4+. |
+| 14 | **Age rating.** Answer the questionnaire from APP_STORE.md, with "No" for Social Media, Shared Location, and Dating and Relationships (N8, N15). | Owner | 10 | Done on November 14, 2026, without the two questions of November 16. Answer them after that date. | The result is 4+. |
 | 15 | **App Privacy.** Answer "No, we do not collect data from this app". | Owner | 10 | Done on November 14, 2026 | The page shows "Data Not Collected". |
-| 16 | **Regulated medical device.** Answer "No". | Owner | 10 | Not known | The declaration is saved. |
+| 16 | **Regulated medical device.** Answer "No". | Owner | 10 | Done on November 14, 2026 | The declaration is saved. |
 | 17 | **App Accessibility.** Moved after step 21: App Store Connect publishes the labels only for an app with a version on the App Store. | Owner | 21 | Waits for the release | — |
 | 18 | **Price and availability.** Free. All countries and regions except China mainland. | Owner | 10 | Not known | The availability is saved. |
 | 19 | **App Review information.** Contact data and the notes from APP_STORE.md. Sign-in is not necessary. Export compliance asks nothing, because `ITSAppUsesNonExemptEncryption` is `false` ([Info.plist:25](../iosApp/iosApp/Info.plist#L25)). | Owner | 10 | Not known | The section is complete. |
-| 20 | **Submit.** Add the TestFlight build to version 1.0. Select manual release, so that you can check the product page before the release. Submit for review. | Owner | 9, 11–19 | Open | The state is "Waiting for Review". |
+| 20 | **Submit.** Add the TestFlight build to version 1.0. Select manual release, so that you can check the product page before the release. Submit for review. | Owner | 9, 11–16, 18, 19 | Open | The state is "Waiting for Review". |
 | 21 | **After the approval.** Check the product page in two storefronts, for example the US and Germany. Release the version. Declare Dark Interface for iPhone and Apple Watch in App Accessibility (step 17). Merge or close PR #5. | Owner | 20 | Open | The app is on the App Store. |
 | 22 | **Merge this file** (N13). | Code, then the owner merges | — | Open | `RELEASE_PLAN.md` is in `main`. |
 
