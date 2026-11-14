@@ -9,6 +9,10 @@
 
 This report replaces no other document. [APP_STORE.md](APP_STORE.md) keeps the metadata, the privacy answers, and the review notes. This report tells you what is still missing before you submit, and which user journeys are missing.
 
+## Remaining before release
+
+[RELEASE_PLAN.md](RELEASE_PLAN.md) has the current status of each finding of this report and the steps that remain before the release. The sections below are the analysis of October 14, 2026, and do not change.
+
 ## Summary
 
 MigraTrack 1.0 is technically ready to upload. The Release archive builds, the privacy manifests are correct, the public URLs load, and all tests pass.
