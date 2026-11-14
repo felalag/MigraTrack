@@ -9,6 +9,8 @@ exclude:
   - REVIEW_READINESS.md
   - LOCALIZATION_PLAN.md
   - review-readiness/
+  - IPHONE_DUO_PROPOSALS.md
+  - iphone-duo/
   - LOCALIZATION_GLOSSARY.md
   - LOCALIZATION_CHECKLIST.md
   - legal/files/ar/
