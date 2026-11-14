@@ -58,6 +58,7 @@ import com.migratrack.app.ui.Numbers
 import com.migratrack.app.ui.components.Card
 import com.migratrack.app.ui.components.MtText
 import com.migratrack.app.ui.components.Page
+import com.migratrack.app.ui.components.Panes
 import com.migratrack.app.ui.components.PrimaryButton
 import com.migratrack.app.ui.components.SecondaryButton
 import com.migratrack.app.ui.components.SectionCaption
@@ -93,23 +94,29 @@ fun SummaryScreen(onOpenSettings: () -> Unit, onLogEpisode: () -> Unit, onEditEp
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) { viewModel.refreshSleep() }
     }
 
-    Page(title = stringResource(Res.string.tab_summary), onSettings = onOpenSettings) {
+    Page(title = stringResource(Res.string.tab_summary), onSettings = onOpenSettings, panes = true) {
         val current = state ?: return@Page
         val snapshot = current.snapshot
-        SectionCaption(stringResource(Res.string.summary_today_date, Dates.monthDay(snapshot.today)))
-        LastThirtyDaysCard(snapshot, current.sleep)
-        Column(verticalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
-            PrimaryButton(stringResource(Res.string.common_log_migraine_episode), onClick = onLogEpisode, icon = Symbols.AddCircle)
-            MtText(
-                stringResource(Res.string.common_medical_disclaimer),
-                MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal),
-                Modifier.fillMaxWidth().padding(horizontal = MtSpacing.sm),
-                color = MtColors.TextSecondary,
-                textAlign = TextAlign.Center,
-            )
-        }
-        if (current.sleep == SleepCard.NeedsAccess) SleepConnectCard(onConnect = viewModel::connectHealth)
-        LastEventCard(snapshot.lastEpisode, graph.timeZone(), onClick = { viewModel.manageEpisode(it, onEditEpisode) })
+        Panes(
+            start = {
+                SectionCaption(stringResource(Res.string.summary_today_date, Dates.monthDay(snapshot.today)))
+                LastThirtyDaysCard(snapshot, current.sleep)
+                Column(verticalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
+                    PrimaryButton(stringResource(Res.string.common_log_migraine_episode), onClick = onLogEpisode, icon = Symbols.AddCircle)
+                    MtText(
+                        stringResource(Res.string.common_medical_disclaimer),
+                        MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal),
+                        Modifier.fillMaxWidth().padding(horizontal = MtSpacing.sm),
+                        color = MtColors.TextSecondary,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            },
+            end = {
+                if (current.sleep == SleepCard.NeedsAccess) SleepConnectCard(onConnect = viewModel::connectHealth)
+                LastEventCard(snapshot.lastEpisode, graph.timeZone(), onClick = { viewModel.manageEpisode(it, onEditEpisode) })
+            },
+        )
     }
 }
 

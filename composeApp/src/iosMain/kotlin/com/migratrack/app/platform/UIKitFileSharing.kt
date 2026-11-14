@@ -30,7 +30,7 @@ class UIKitFileSharing : FileSharing {
     private var previewSource: PreviewSource? = null
 
     override suspend fun preview(file: ExportFile) {
-        val url = write(file)
+        val url = writeExport(file)
         withContext(Dispatchers.Main) {
             val host = topViewController() ?: return@withContext
             val source = PreviewSource(url)
@@ -42,7 +42,7 @@ class UIKitFileSharing : FileSharing {
     }
 
     override suspend fun share(files: List<ExportFile>, text: String?) {
-        val urls = files.map { write(it) }
+        val urls = files.map { writeExport(it) }
         withContext(Dispatchers.Main) {
             val host = topViewController() ?: return@withContext
             val items: List<Any> = listOfNotNull(text) + urls
@@ -52,15 +52,6 @@ class UIKitFileSharing : FileSharing {
         }
     }
 
-    @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
-    private suspend fun write(file: ExportFile): NSURL = withContext(Dispatchers.IO) {
-        val folder = NSTemporaryDirectory() + "exports"
-        NSFileManager.defaultManager.createDirectoryAtPath(folder, withIntermediateDirectories = true, attributes = null, error = null)
-        val url = NSURL.fileURLWithPath("$folder/${file.fileName}")
-        val data = file.bytes.usePinned { pinned -> NSData.create(bytes = pinned.addressOf(0), length = file.bytes.size.toULong()) }
-        check(data.writeToURL(url, atomically = true)) { getString(Res.string.export_write_failed, file.fileName) }
-        url
-    }
 
     private class PreviewSource(url: NSURL) : NSObject(), QLPreviewControllerDataSourceProtocol {
         // NSURL adopts QLPreviewItem only through a QuickLook category, which Kotlin/Native cannot cast to.
@@ -74,4 +65,14 @@ class UIKitFileSharing : FileSharing {
     private class PreviewItem(private val url: NSURL) : NSObject(), QLPreviewItemProtocol {
         override fun previewItemURL(): NSURL = url
     }
+}
+
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+internal suspend fun writeExport(file: ExportFile): NSURL = withContext(Dispatchers.IO) {
+    val folder = NSTemporaryDirectory() + "exports"
+    NSFileManager.defaultManager.createDirectoryAtPath(folder, withIntermediateDirectories = true, attributes = null, error = null)
+    val url = NSURL.fileURLWithPath("$folder/${file.fileName}")
+    val data = file.bytes.usePinned { pinned -> NSData.create(bytes = pinned.addressOf(0), length = file.bytes.size.toULong()) }
+    check(data.writeToURL(url, atomically = true)) { getString(Res.string.export_write_failed, file.fileName) }
+    url
 }

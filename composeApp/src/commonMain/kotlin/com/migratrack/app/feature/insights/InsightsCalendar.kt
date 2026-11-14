@@ -13,6 +13,8 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -183,14 +185,20 @@ fun CalendarCard(
     }
 }
 
+/** The count moves under the month when both do not fit on one line, as on the outer display of iPhone Duo. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CalendarHeader(calendar: MonthCalendar, onPickMonth: () -> Unit) {
     val description = stringResource(Res.string.calendar_choose_month_a11y, Dates.monthYear(calendar.month))
     Column(verticalArrangement = Arrangement.spacedBy(MtSpacing.xs)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MtSpacing.sm),
+            verticalArrangement = Arrangement.spacedBy(MtSpacing.xs),
+            itemVerticalAlignment = Alignment.CenterVertically,
+        ) {
             Row(
                 Modifier
-                    .weight(1f)
                     .semantics(mergeDescendants = true) {
                         contentDescription = description
                         role = Role.Button
@@ -208,7 +216,7 @@ private fun CalendarHeader(calendar: MonthCalendar, onPickMonth: () -> Unit) {
                 )
                 Icon(Symbols.ChevronRight, tint = MtColors.TextSecondary, size = 18.dp)
             }
-            Spacer(Modifier.width(MtSpacing.sm))
+            Spacer(Modifier.weight(1f))
             AttackDaysPill(calendar.attackDays)
         }
         Box(Modifier.fillMaxWidth().height(0.5.dp).background(Color.White.copy(alpha = 0.05f)))

@@ -57,6 +57,8 @@ import com.migratrack.app.ui.components.ListDivider
 import com.migratrack.app.ui.components.ListRow
 import com.migratrack.app.ui.components.MtText
 import com.migratrack.app.ui.components.Page
+import com.migratrack.app.ui.components.Panes
+import com.migratrack.app.ui.components.reportDragSource
 import com.migratrack.app.ui.components.PrimaryButton
 import com.migratrack.app.ui.components.RowTrailing
 import com.migratrack.app.ui.components.SecondaryButton
@@ -133,6 +135,8 @@ class ExportViewModel(private val graph: AppGraph) : ViewModel() {
 
     fun exportPdf() = run(ExportJob.Pdf) { graph.services.files.preview(graph.exportReport.pdf()) }
 
+    suspend fun reportPdf(): ExportFile = graph.exportReport.pdf()
+
     fun exportExcel() = run(ExportJob.Excel) { graph.services.files.share(listOf(graph.exportReport.xlsx())) }
 
     fun share() = run(ExportJob.Share) {
@@ -165,89 +169,95 @@ fun ExportScreen(onOpenSettings: () -> Unit) {
     val viewModel = viewModel { ExportViewModel(graph) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Page(title = stringResource(Res.string.tab_export), onSettings = onOpenSettings) {
+    Page(title = stringResource(Res.string.tab_export), onSettings = onOpenSettings, panes = true) {
         val current = state ?: return@Page
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
-            StatTile(Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    MtText(Numbers.integer(current.episodeCount), MtTheme.type.largeTitle)
-                    Spacer(Modifier.width(MtSpacing.xs))
-                    MtText(pluralStringResource(Res.plurals.export_episodes_unit, current.episodeCount), MtTheme.type.subhead, color = MtColors.Caption, modifier = Modifier.padding(bottom = 5.dp))
+        Panes(
+            start = {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
+                    StatTile(Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            MtText(Numbers.integer(current.episodeCount), MtTheme.type.largeTitle)
+                            Spacer(Modifier.width(MtSpacing.xs))
+                            MtText(pluralStringResource(Res.plurals.export_episodes_unit, current.episodeCount), MtTheme.type.subhead, color = MtColors.Caption, modifier = Modifier.padding(bottom = 5.dp))
+                        }
+                        MtText(stringResource(Res.string.export_episodes_recorded), MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal), color = MtColors.TextSecondary)
+                    }
+                    StatTile(Modifier.weight(1f).pressable(role = Role.Button, pressedScale = 0.97f, onClick = viewModel::chooseRange)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            MtText(stringResource(current.preferences.range.title), MtTheme.type.headline.copy(fontWeight = FontWeight.Bold), modifier = Modifier.weight(1f, fill = false))
+                            com.migratrack.app.ui.icons.Icon(Symbols.ChevronRight, tint = MtColors.TextSecondary, size = 18.dp)
+                        }
+                        MtText(current.dateRange, MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal), color = MtColors.TextSecondary)
+                    }
                 }
-                MtText(stringResource(Res.string.export_episodes_recorded), MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal), color = MtColors.TextSecondary)
-            }
-            StatTile(Modifier.weight(1f).pressable(role = Role.Button, pressedScale = 0.97f, onClick = viewModel::chooseRange)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    MtText(stringResource(current.preferences.range.title), MtTheme.type.headline.copy(fontWeight = FontWeight.Bold), modifier = Modifier.weight(1f, fill = false))
-                    com.migratrack.app.ui.icons.Icon(Symbols.ChevronRight, tint = MtColors.TextSecondary, size = 18.dp)
+
+                GroupedSection(stringResource(Res.string.export_include), background = MtColors.CardRaised) {
+                    val preferences = current.preferences
+                    ListRow(
+                        title = stringResource(Res.string.export_medications),
+                        subtitle = stringResource(Res.string.export_medications_subtitle),
+                        icon = Symbols.Medication,
+                        iconTint = MtColors.BrandLabel,
+                        iconBackground = MtColors.Control,
+                        trailing = RowTrailing.Toggle(preferences.includeMedications) { on -> viewModel.update { it.copy(includeMedications = on) } },
+                    )
+                    ListDivider(inset = false)
+                    ListRow(
+                        title = stringResource(Res.string.export_symptoms),
+                        subtitle = stringResource(Res.string.export_symptoms_subtitle),
+                        icon = Symbols.Visibility,
+                        iconTint = MtColors.Cyan,
+                        iconBackground = MtColors.Control,
+                        trailing = RowTrailing.Toggle(preferences.includeSymptoms) { on -> viewModel.update { it.copy(includeSymptoms = on) } },
+                    )
+                    ListDivider(inset = false)
+                    ListRow(
+                        title = stringResource(Res.string.common_possible_triggers),
+                        subtitle = stringResource(Res.string.export_triggers_subtitle),
+                        icon = Symbols.Bolt,
+                        iconTint = MtColors.Purple,
+                        iconBackground = MtColors.Control,
+                        trailing = RowTrailing.Toggle(preferences.includeTriggers) { on -> viewModel.update { it.copy(includeTriggers = on) } },
+                    )
+                    ListDivider(inset = false)
+                    ListRow(
+                        title = stringResource(Res.string.export_pain_charts),
+                        subtitle = stringResource(Res.string.export_pain_charts_subtitle),
+                        icon = Symbols.StackedLineChart,
+                        iconTint = MtColors.Pink,
+                        iconBackground = MtColors.Control,
+                        trailing = RowTrailing.Toggle(preferences.includePainCharts) { on -> viewModel.update { it.copy(includePainCharts = on) } },
+                    )
                 }
-                MtText(current.dateRange, MtTheme.type.subhead.copy(fontWeight = FontWeight.Normal), color = MtColors.TextSecondary)
-            }
-        }
-
-        GroupedSection(stringResource(Res.string.export_include), background = MtColors.CardRaised) {
-            val preferences = current.preferences
-            ListRow(
-                title = stringResource(Res.string.export_medications),
-                subtitle = stringResource(Res.string.export_medications_subtitle),
-                icon = Symbols.Medication,
-                iconTint = MtColors.BrandLabel,
-                iconBackground = MtColors.Control,
-                trailing = RowTrailing.Toggle(preferences.includeMedications) { on -> viewModel.update { it.copy(includeMedications = on) } },
-            )
-            ListDivider(inset = false)
-            ListRow(
-                title = stringResource(Res.string.export_symptoms),
-                subtitle = stringResource(Res.string.export_symptoms_subtitle),
-                icon = Symbols.Visibility,
-                iconTint = MtColors.Cyan,
-                iconBackground = MtColors.Control,
-                trailing = RowTrailing.Toggle(preferences.includeSymptoms) { on -> viewModel.update { it.copy(includeSymptoms = on) } },
-            )
-            ListDivider(inset = false)
-            ListRow(
-                title = stringResource(Res.string.common_possible_triggers),
-                subtitle = stringResource(Res.string.export_triggers_subtitle),
-                icon = Symbols.Bolt,
-                iconTint = MtColors.Purple,
-                iconBackground = MtColors.Control,
-                trailing = RowTrailing.Toggle(preferences.includeTriggers) { on -> viewModel.update { it.copy(includeTriggers = on) } },
-            )
-            ListDivider(inset = false)
-            ListRow(
-                title = stringResource(Res.string.export_pain_charts),
-                subtitle = stringResource(Res.string.export_pain_charts_subtitle),
-                icon = Symbols.StackedLineChart,
-                iconTint = MtColors.Pink,
-                iconBackground = MtColors.Control,
-                trailing = RowTrailing.Toggle(preferences.includePainCharts) { on -> viewModel.update { it.copy(includePainCharts = on) } },
-            )
-        }
-
-        Column(verticalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
-            val running = current.running
-            PrimaryButton(
-                text = stringResource(if (running == ExportJob.Pdf) running.progressLabel else Res.string.export_pdf),
-                icon = Symbols.Download,
-                enabled = running == null,
-                onClick = viewModel::exportPdf,
-            )
-            SecondaryButton(
-                text = stringResource(if (running == ExportJob.Excel) running.progressLabel else Res.string.export_excel),
-                icon = Symbols.TableView,
-                iconTint = MtColors.Green,
-                enabled = running == null,
-                onClick = viewModel::exportExcel,
-            )
-            SecondaryButton(
-                text = stringResource(if (running == ExportJob.Share) running.progressLabel else Res.string.export_share),
-                icon = Symbols.IosShare,
-                iconTint = MtColors.Cyan,
-                outlined = true,
-                enabled = running == null,
-                onClick = viewModel::share,
-            )
-        }
+            },
+            end = {
+                Column(verticalArrangement = Arrangement.spacedBy(MtSpacing.sm)) {
+                    val running = current.running
+                    PrimaryButton(
+                        text = stringResource(if (running == ExportJob.Pdf) running.progressLabel else Res.string.export_pdf),
+                        icon = Symbols.Download,
+                        enabled = running == null,
+                        onClick = viewModel::exportPdf,
+                        modifier = Modifier.reportDragSource(viewModel::reportPdf),
+                    )
+                    SecondaryButton(
+                        text = stringResource(if (running == ExportJob.Excel) running.progressLabel else Res.string.export_excel),
+                        icon = Symbols.TableView,
+                        iconTint = MtColors.Green,
+                        enabled = running == null,
+                        onClick = viewModel::exportExcel,
+                    )
+                    SecondaryButton(
+                        text = stringResource(if (running == ExportJob.Share) running.progressLabel else Res.string.export_share),
+                        icon = Symbols.IosShare,
+                        iconTint = MtColors.Cyan,
+                        outlined = true,
+                        enabled = running == null,
+                        onClick = viewModel::share,
+                    )
+                }
+            },
+        )
     }
 }
 

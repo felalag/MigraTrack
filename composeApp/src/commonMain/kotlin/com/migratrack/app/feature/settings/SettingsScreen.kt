@@ -68,6 +68,7 @@ import com.migratrack.app.ui.components.ListDivider
 import com.migratrack.app.ui.components.ListRow
 import com.migratrack.app.ui.components.MtText
 import com.migratrack.app.ui.components.Page
+import com.migratrack.app.ui.components.Panes
 import com.migratrack.app.ui.components.RowTrailing
 import com.migratrack.app.ui.components.pressable
 import com.migratrack.app.ui.getString
@@ -155,10 +156,8 @@ fun SettingsScreen(onBack: () -> Unit, onEditBaseline: (step: Int) -> Unit, onOp
     val viewModel = viewModel { SettingsViewModel(graph) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Page(title = stringResource(Res.string.common_settings), onBack = onBack) {
+    Page(title = stringResource(Res.string.common_settings), onBack = onBack, panes = true) {
         val current = state ?: return@Page
-        ProfileCard(current, onEditName = viewModel::editName)
-
         val diagnoses = current.diagnoses.map { stringResource(it.title) }.joinToString(ListSeparator).ifEmpty { stringResource(Res.string.common_not_set) }
         val triggers = if (current.triggerCount == 0) {
             stringResource(Res.string.settings_no_triggers)
@@ -167,60 +166,66 @@ fun SettingsScreen(onBack: () -> Unit, onEditBaseline: (step: Int) -> Unit, onOp
         }
         val treatments = current.treatments.map { it.nameText.resolve() }.joinToString(ListSeparator)
             .ifEmpty { stringResource(Res.string.settings_no_medications) }
-        GroupedSection(stringResource(Res.string.settings_section_baseline)) {
-            ListRow(stringResource(Res.string.settings_baseline_diagnoses), Symbols.Psychology, MtColors.Cyan, subtitle = diagnoses, trailing = RowTrailing.Chevron) { onEditBaseline(1) }
-            ListDivider()
-            ListRow(stringResource(Res.string.settings_known_triggers), Symbols.Bolt, MtColors.Pink, subtitle = triggers, trailing = RowTrailing.Chevron) { onEditBaseline(2) }
-            ListDivider()
-            ListRow(stringResource(Res.string.common_treatment_blueprint), Symbols.Medication, MtColors.Green, subtitle = treatments, trailing = RowTrailing.Chevron) { onEditBaseline(3) }
-        }
+        Panes(
+            start = {
+                ProfileCard(current, onEditName = viewModel::editName)
+                GroupedSection(stringResource(Res.string.settings_section_baseline)) {
+                    ListRow(stringResource(Res.string.settings_baseline_diagnoses), Symbols.Psychology, MtColors.Cyan, subtitle = diagnoses, trailing = RowTrailing.Chevron) { onEditBaseline(1) }
+                    ListDivider()
+                    ListRow(stringResource(Res.string.settings_known_triggers), Symbols.Bolt, MtColors.Pink, subtitle = triggers, trailing = RowTrailing.Chevron) { onEditBaseline(2) }
+                    ListDivider()
+                    ListRow(stringResource(Res.string.common_treatment_blueprint), Symbols.Medication, MtColors.Green, subtitle = treatments, trailing = RowTrailing.Chevron) { onEditBaseline(3) }
+                }
+            },
+            end = {
+                GroupedSection(stringResource(Res.string.settings_section_preferences)) {
+                    ListRow(
+                        stringResource(Res.string.settings_appearance),
+                        Symbols.DarkMode,
+                        MtColors.Caption,
+                        trailing = RowTrailing.Value(stringResource(Res.string.settings_appearance_value)),
+                    )
+                    ListDivider()
+                    val info = viewModel.appInfo
+                    ListRow(
+                        stringResource(Res.string.settings_version),
+                        Symbols.Info,
+                        MtColors.Caption,
+                        trailing = RowTrailing.Value(stringResource(Res.string.settings_version_value, info.version, info.build)),
+                    )
+                }
 
-        GroupedSection(stringResource(Res.string.settings_section_preferences)) {
-            ListRow(
-                stringResource(Res.string.settings_appearance),
-                Symbols.DarkMode,
-                MtColors.Caption,
-                trailing = RowTrailing.Value(stringResource(Res.string.settings_appearance_value)),
-            )
-            ListDivider()
-            val info = viewModel.appInfo
-            ListRow(
-                stringResource(Res.string.settings_version),
-                Symbols.Info,
-                MtColors.Caption,
-                trailing = RowTrailing.Value(stringResource(Res.string.settings_version_value, info.version, info.build)),
-            )
-        }
+                GroupedSection(stringResource(Res.string.settings_section_legal)) {
+                    ListRow(stringResource(Res.string.legal_privacy_policy), AppIcons.Shield, MtColors.Cyan, trailing = RowTrailing.Chevron) { onOpenDocument(LegalDocument.PrivacyPolicy) }
+                    ListDivider()
+                    ListRow(stringResource(Res.string.legal_terms_of_service), AppIcons.Document, MtColors.Caption, trailing = RowTrailing.Chevron) { onOpenDocument(LegalDocument.TermsOfService) }
+                }
 
-        GroupedSection(stringResource(Res.string.settings_section_legal)) {
-            ListRow(stringResource(Res.string.legal_privacy_policy), AppIcons.Shield, MtColors.Cyan, trailing = RowTrailing.Chevron) { onOpenDocument(LegalDocument.PrivacyPolicy) }
-            ListDivider()
-            ListRow(stringResource(Res.string.legal_terms_of_service), AppIcons.Document, MtColors.Caption, trailing = RowTrailing.Chevron) { onOpenDocument(LegalDocument.TermsOfService) }
-        }
+                if (viewModel.appInfo.isDebug) {
+                    GroupedSection(stringResource(Res.string.settings_section_developer)) {
+                        ListRow(
+                            stringResource(Res.string.settings_load_sample_data),
+                            Symbols.Science,
+                            MtColors.Orange,
+                            subtitle = stringResource(Res.string.settings_load_sample_data_subtitle),
+                            onClick = viewModel::loadSampleData,
+                        )
+                    }
+                }
 
-        if (viewModel.appInfo.isDebug) {
-            GroupedSection(stringResource(Res.string.settings_section_developer)) {
-                ListRow(
-                    stringResource(Res.string.settings_load_sample_data),
-                    Symbols.Science,
-                    MtColors.Orange,
-                    subtitle = stringResource(Res.string.settings_load_sample_data_subtitle),
-                    onClick = viewModel::loadSampleData,
-                )
-            }
-        }
-
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .heightIn(min = 56.dp)
-                .clip(RoundedCornerShape(MtRadius.lg))
-                .background(MtColors.Card)
-                .pressable(pressedScale = 1f, onClick = viewModel::deleteAllData),
-            contentAlignment = Alignment.Center,
-        ) {
-            MtText(stringResource(Res.string.settings_delete_all), MtTheme.type.bodyStrong, color = MtColors.Pink)
-        }
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 56.dp)
+                        .clip(RoundedCornerShape(MtRadius.lg))
+                        .background(MtColors.Card)
+                        .pressable(pressedScale = 1f, onClick = viewModel::deleteAllData),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    MtText(stringResource(Res.string.settings_delete_all), MtTheme.type.bodyStrong, color = MtColors.Pink)
+                }
+            },
+        )
     }
 }
 

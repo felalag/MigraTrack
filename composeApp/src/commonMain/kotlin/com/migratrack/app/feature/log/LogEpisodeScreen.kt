@@ -26,18 +26,19 @@ fun LogEpisodeScreen(onOpenSettings: () -> Unit, onSaved: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val haptics = LocalHapticFeedback.current
 
-    Page(title = stringResource(Res.string.episode_log_title), onSettings = onOpenSettings) {
+    Page(title = stringResource(Res.string.episode_log_title), onSettings = onOpenSettings, panes = true) {
         val draft = state.draft ?: return@Page
-        EpisodeFormFields(draft, state.baselineTriggers, viewModel, graph.today(), graph.timeZone())
-        PrimaryButton(
-            text = stringResource(Res.string.common_save_episode),
-            icon = Symbols.Save,
-            enabled = !state.saving,
-            height = 56.dp,
-            onClick = {
-                haptics.performHapticFeedback(HapticFeedbackType.Confirm)
-                viewModel.save(onSaved)
-            },
-        )
+        EpisodeFormFields(draft, state.baselineTriggers, viewModel, graph.today(), graph.timeZone()) {
+            PrimaryButton(
+                text = stringResource(Res.string.common_save_episode),
+                icon = Symbols.Save,
+                enabled = !state.saving,
+                height = 56.dp,
+                onClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+                    viewModel.save(onSaved)
+                },
+            )
+        }
     }
 }
