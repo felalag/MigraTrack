@@ -139,7 +139,7 @@ The section "Remaining before release" of October 16, 2026 was never committed. 
 | ID | Blocker | Owner | Steps |
 |---|---|---|---|
 | B1 | Upload of a signed build to TestFlight | Owner | 9 |
-| B2 | Store screenshots | Code takes them, owner uploads them | 7, 13 |
+| B2 | Upload of the store screenshots | Owner | 13 |
 | B3 | App Store Connect forms, with the new age rating questions | Owner | 11, 12, 14, 19 |
 | N13 | This file is not in `main` | Code, then the owner merges | 22 |
 
@@ -155,7 +155,7 @@ Do the steps in this order. A step can start when the steps in its "Needs" colum
 | 4 | **Fix the two code blockers** N12 and N6. | Code | — | Done, PR #48 | — |
 | 5 | **Refresh the release documents.** | Code | 3 | Done, PR #47 | — |
 | 6 | **DSA.** In Business › Agreements › Compliance, declare "I'm not a trader under the DSA". Change it if the app later earns money. | Owner | 2 | Done. Business › Compliance shows the Digital Services Act as Active for 27 countries or regions, updated on November 8, 2026. | — |
-| 7 | **Simulator check and store screenshots.** Do a clean install on iPhone 18 Pro, a run with data on iPhone 18 Pro Max, the watch on Series 12 (46 mm), and one Arabic and one Japanese run. Then take the English screenshots: iPhone 18 Pro (1206 × 2622), iPhone 18 Pro Max (1320 × 2868), and the watch (416 × 496). Use a Release build, or a Debug build without the Settings screen (N10). | Code | 1, 4 | Open. The old images in the session notes (October 14) show the old icon. Do not use them. | The PNG files are in the session notes, outside Git. |
+| 7 | **Simulator check and store screenshots.** Do a clean install on iPhone 18 Pro, a run with data on iPhone 18 Pro Max, the watch on Series 12 (46 mm), and one Arabic and one Japanese run. Then take the English screenshots: iPhone 18 Pro (1206 × 2622), iPhone 18 Pro Max (1320 × 2868), and the watch (416 × 496). Use a Release build, or a Debug build without the Settings screen (N10). | Code | 1, 4 | Done on November 15, 2026. Release build, sample data, en_US region. No blocker in the clean install, the update, the watch, Arabic and Japanese. 6 + 6 iPhone and 3 watch PNG files, without alpha, in `screenshots-app-store-1.0/` of the session notes. | The PNG files are in the session notes, outside Git. |
 | 8 | **Identifiers.** The App Group `group.com.migratrack.app`, and the App IDs `com.migratrack.app` (HealthKit), `com.migratrack.app.watchkitapp` (App Groups) and `com.migratrack.app.watchkitapp.complications` (App Groups). | Owner | 2 | Done. Automatic signing registered them for PR #49. | — |
 | 9 | **Signing and TestFlight.** Archive `main` in Xcode. Open **Generate Privacy Report**. In Organizer, select Distribute App › App Store Connect. Xcode makes the Distribution certificate on the first upload. Install the build from TestFlight on an iPhone with a paired Apple Watch. Do the review notes of APP_STORE.md as a test. | Owner | 2, 8, 10 | `TEAM_ID` done (PR #49). Upload: not done | TestFlight shows the build as "Ready to Test". |
 | 10 | **App record.** Add a new iOS app: primary language English (U.S.), bundle ID `com.migratrack.app`, a SKU. | Owner | 8 | Done on November 14, 2026, with the name "MigraTrack: Migraine Diary" (N16). | — |
