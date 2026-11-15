@@ -10,7 +10,7 @@ MigraTrack przechowuje dane na iPhonie i Apple Watch użytkownika. Nie zbieramy,
 
 Aplikacja nie ma konta ani serwera. Nie zawiera analityki ani reklam.
 
-Twórcą MigraTrack jest Ira Babayed.
+Twórcą MigraTrack jest Iryna Babayed.
 
 ## Dane na iPhonie
 

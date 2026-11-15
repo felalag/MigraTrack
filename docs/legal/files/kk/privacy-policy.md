@@ -10,7 +10,7 @@ MigraTrack деректеріңізді iPhone және Apple Watch құрылғ
 
 Қолданбада тіркелгі де, сервер де жоқ. Онда аналитика да, жарнама да жоқ.
 
-MigraTrack әзірлеушісі — Ira Babayed.
+MigraTrack әзірлеушісі — Iryna Babayed.
 
 ## iPhone-дағы деректер
 

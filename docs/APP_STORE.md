@@ -8,7 +8,7 @@ The requirements were checked against the Apple sources in [Sources](#sources) o
 
 - [x] Put the contact email address in `docs/support.md` and in the legal texts in `docs/legal/files/`.
 - [x] Turn on GitHub Pages: Settings › Pages › Deploy from a branch › `main` › `/docs`. Pages from a private repository needs GitHub Pro, or make the repository public.
-- [ ] Open the three URLs below in a browser and make sure that they load.
+- [x] Open the three URLs below in a browser and make sure that they load.
 - [ ] Set `TEAM_ID` and `APP_BUNDLE_ID` in `iosApp/Configuration/Config.xcconfig`, archive, and open **Product › Archive › Generate Privacy Report** to see the three privacy manifests.
 - [ ] Complete the declaration in App Information › App Store Regulations & Permits › Declare Regulated Medical Device. The answer is **No**.
 
@@ -16,9 +16,9 @@ The requirements were checked against the Apple sources in [Sources](#sources) o
 
 | Field | URL |
 |---|---|
-| Privacy Policy URL (required) | https://felalag.github.io/MirgaTrack/privacy/ |
-| Support URL (required) | https://felalag.github.io/MirgaTrack/support/ |
-| Marketing URL (optional) | https://felalag.github.io/MirgaTrack/ |
+| Privacy Policy URL (required) | https://felalag.github.io/MigraTrack/privacy/ |
+| Support URL (required) | https://felalag.github.io/MigraTrack/support/ |
+| Marketing URL (optional) | https://felalag.github.io/MigraTrack/ |
 
 The app and the website show the same legal text. The Markdown files in `docs/legal/files/` are the only copy: the app bundles them as Compose resources, and GitHub Pages publishes them.
 The Support URL must lead to contact information, so the support page shows an email address.
@@ -37,12 +37,14 @@ A new localization takes the screenshots of the primary language until you uploa
 
 | Field | Value | Limit |
 |---|---|---|
-| Name | MigraTrack | 30 characters |
-| Subtitle | Migraine Diary & Reports | 30 characters |
+| Name | MigraTrack: Migraine Diary | 30 characters |
+| Subtitle | Headache Log & Doctor Reports | 30 characters |
 | Primary category | Health & Fitness | |
 | Secondary category | Medical | |
 | Price | Free | |
-| Copyright | 2026 Ira Babayed | |
+| Copyright | 2026 Iryna Babayed | |
+
+The name "MigraTrack" alone is reserved by an app record of another developer. App Store Connect refused it on November 14, 2026, and accepted "MigraTrack: Migraine Diary". All localizations use this English name, so the files in [app-store](app-store/) need no new translation. The Home Screen still shows "MigraTrack", because `PRODUCT_NAME` sets the name of the binary.
 
 ## Version information
 
@@ -91,10 +93,10 @@ MigraTrack is not a medical device and does not give medical advice. Speak with 
 ### Keywords (100 bytes)
 
 ```text
-headache,tracker,log,aura,pain,trigger,sleep,medication,attack,journal,calendar,doctor,pdf,watch
+tracker,aura,pain,trigger,sleep,medication,attack,journal,calendar,pdf,watch,symptom,triptan,chronic
 ```
 
-96 bytes. The name and the subtitle are searchable already, so the list does not repeat "migraine", "diary", or "reports".
+100 bytes. The name and the subtitle are searchable already, so the list does not repeat "migraine", "diary", "headache", "log", "doctor" or "reports".
 
 ### What's New
 

@@ -10,7 +10,7 @@ MigraTrack ଆପଣଙ୍କ ଡାଟା ଆପଣଙ୍କ iPhone ଓ Apple W
 
 ଆପରେ କୌଣସି ଆକାଉଣ୍ଟ ଓ କୌଣସି ସର୍ଭର ନାହିଁ। ଏଥିରେ କୌଣସି ଆନାଲିଟିକ୍ସ ଓ କୌଣସି ବିଜ୍ଞାପନ ନାହିଁ।
 
-MigraTrack Ira Babayedଙ୍କ ଦ୍ୱାରା ବିକଶିତ।
+MigraTrack Iryna Babayedଙ୍କ ଦ୍ୱାରା ବିକଶିତ।
 
 ## ଆପଣଙ୍କ iPhoneରେ ଡାଟା
 

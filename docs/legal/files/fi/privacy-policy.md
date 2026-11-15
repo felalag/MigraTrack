@@ -10,7 +10,7 @@ MigraTrack säilyttää tietosi iPhonessasi ja Apple Watchissasi. Emme kerää, 
 
 Apissa ei ole tiliä eikä palvelinta. Se ei sisällä analytiikkaa eikä mainoksia.
 
-MigraTrackin kehittäjä on Ira Babayed.
+MigraTrackin kehittäjä on Iryna Babayed.
 
 ## Tiedot iPhonessasi
 

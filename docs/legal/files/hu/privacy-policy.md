@@ -10,7 +10,7 @@ A MigraTrack az Ön adatait az iPhone-ján és az Apple Watchán tárolja. Az ad
 
 Az appnak nincs fiókja és nincs szervere. Nem tartalmaz analitikát és hirdetést.
 
-A MigraTracket Ira Babayed fejleszti.
+A MigraTracket Iryna Babayed fejleszti.
 
 ## Adatok az iPhone-on
 

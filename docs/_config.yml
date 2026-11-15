@@ -7,6 +7,7 @@ exclude:
   - APP_STORE.md
   - user-journey/
   - REVIEW_READINESS.md
+  - RELEASE_PLAN.md
   - LOCALIZATION_PLAN.md
   - review-readiness/
   - IPHONE_DUO_PROPOSALS.md

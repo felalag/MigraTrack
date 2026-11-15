@@ -10,7 +10,7 @@ MigraTrack آپ کا ڈیٹا آپ کے iPhone اور Apple Watch پر رکھت�
 
 ایپ میں کوئی اکاؤنٹ اور کوئی سرور نہیں ہے۔ اس میں کوئی اینالٹکس اور کوئی اشتہار نہیں ہے۔
 
-MigraTrack کو Ira Babayed نے بنایا ہے۔
+MigraTrack کو Iryna Babayed نے بنایا ہے۔
 
 ## آپ کے iPhone پر ڈیٹا
 

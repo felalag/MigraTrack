@@ -10,7 +10,7 @@ MigraTrack আপনার ডেটা আপনার iPhone ও Apple Watch-�
 
 অ্যাপে কোনো অ্যাকাউন্ট বা সার্ভার নেই। এতে কোনো অ্যানালিটিক্স বা বিজ্ঞাপন নেই।
 
-MigraTrack তৈরি করেছেন Ira Babayed।
+MigraTrack তৈরি করেছেন Iryna Babayed।
 
 ## আপনার iPhone-এর ডেটা
 

@@ -10,7 +10,7 @@ MigraTrack menyimpan data anda dalam iPhone dan Apple Watch anda. Kami tidak men
 
 App ini tiada akaun dan tiada pelayan. App ini tidak mengandungi analitik dan tidak mengandungi iklan.
 
-MigraTrack dibangunkan oleh Ira Babayed.
+MigraTrack dibangunkan oleh Iryna Babayed.
 
 ## Data dalam iPhone anda
 

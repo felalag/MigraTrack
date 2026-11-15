@@ -10,7 +10,7 @@ MigraTrack మీ డేటాను మీ iPhone, Apple Watchలో ఉంచ�
 
 యాప్‌కు ఖాతా లేదు, సర్వర్ లేదు. ఇందులో అనలిటిక్స్ లేవు, ప్రకటనలు లేవు.
 
-MigraTrackను Ira Babayed అభివృద్ధి చేశారు.
+MigraTrackను Iryna Babayed అభివృద్ధి చేశారు.
 
 ## మీ iPhoneలోని డేటా
 

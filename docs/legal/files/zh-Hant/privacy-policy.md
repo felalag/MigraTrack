@@ -10,7 +10,7 @@ MigraTrack 將您的資料保留在您的 iPhone 和 Apple Watch 上。我們不
 
 本 App 沒有帳號，也沒有伺服器。它不含分析功能，也不含廣告。
 
-MigraTrack 由 Ira Babayed 開發。
+MigraTrack 由 Iryna Babayed 開發。
 
 ## iPhone 上的資料
 
