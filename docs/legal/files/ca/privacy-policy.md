@@ -10,7 +10,7 @@ MigraTrack desa les vostres dades al vostre iPhone i al vostre Apple Watch. No r
 
 L’app no té cap compte ni cap servidor. No conté analítica ni publicitat.
 
-MigraTrack el desenvolupa Ira Babayed.
+MigraTrack el desenvolupa Iryna Babayed.
 
 ## Dades al vostre iPhone
 

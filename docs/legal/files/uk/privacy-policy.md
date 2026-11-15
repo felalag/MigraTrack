@@ -10,7 +10,7 @@ MigraTrack зберігає ваші дані на вашому iPhone і ваш
 
 У програми немає облікового запису і сервера. У ній немає аналітики і реклами.
 
-Розробник MigraTrack — Ira Babayed.
+Розробник MigraTrack — Iryna Babayed.
 
 ## Дані на iPhone
 

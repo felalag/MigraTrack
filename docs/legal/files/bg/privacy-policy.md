@@ -10,7 +10,7 @@ MigraTrack пази данните ви на вашия iPhone и вашия App
 
 Приложението няма акаунт и сървър. В него няма анализи и реклами.
 
-MigraTrack е разработено от Ira Babayed.
+MigraTrack е разработено от Iryna Babayed.
 
 ## Данни на вашия iPhone
 

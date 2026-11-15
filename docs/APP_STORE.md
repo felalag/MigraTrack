@@ -42,7 +42,7 @@ A new localization takes the screenshots of the primary language until you uploa
 | Primary category | Health & Fitness | |
 | Secondary category | Medical | |
 | Price | Free | |
-| Copyright | 2026 Ira Babayed | |
+| Copyright | 2026 Iryna Babayed | |
 
 The name "MigraTrack" alone is reserved by an app record of another developer. App Store Connect refused it on November 14, 2026, and accepted "MigraTrack: Migraine Diary". All localizations use this English name, so the files in [app-store](app-store/) need no new translation. The Home Screen still shows "MigraTrack", because `PRODUCT_NAME` sets the name of the binary.
 

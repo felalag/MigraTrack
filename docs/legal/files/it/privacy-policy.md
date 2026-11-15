@@ -10,7 +10,7 @@ MigraTrack conserva i suoi dati sul suo iPhone e sul suo Apple Watch. Non raccog
 
 L’app non ha un account né un server. Non contiene strumenti di analisi né pubblicità.
 
-MigraTrack è sviluppata da Ira Babayed.
+MigraTrack è sviluppata da Iryna Babayed.
 
 ## Dati sul suo iPhone
 

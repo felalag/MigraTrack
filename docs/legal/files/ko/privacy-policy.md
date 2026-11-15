@@ -10,7 +10,7 @@ MigraTrack은 데이터를 사용자의 iPhone과 Apple Watch에 저장합니다
 
 이 앱에는 계정과 서버가 없습니다. 분석 기능과 광고도 없습니다.
 
-MigraTrack은 Ira Babayed가 개발합니다.
+MigraTrack은 Iryna Babayed가 개발합니다.
 
 ## iPhone의 데이터
 

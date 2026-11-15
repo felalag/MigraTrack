@@ -10,7 +10,7 @@ MigraTrack lưu dữ liệu của bạn trên iPhone và Apple Watch của bạn
 
 Ứng dụng không có tài khoản và không có máy chủ. Ứng dụng không có công cụ phân tích và không có quảng cáo.
 
-MigraTrack do Ira Babayed phát triển.
+MigraTrack do Iryna Babayed phát triển.
 
 ## Dữ liệu trên iPhone của bạn
 

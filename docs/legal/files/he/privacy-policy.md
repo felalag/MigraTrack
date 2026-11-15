@@ -10,7 +10,7 @@ MigraTrack שומר את הנתונים ב־iPhone וב־Apple Watch שלך. א�
 
 ליישום אין חשבון ואין שרת. אין בו כלי ניתוח ואין בו פרסומות.
 
-MigraTrack פותח על ידי Ira Babayed.
+MigraTrack פותח על ידי Iryna Babayed.
 
 ## הנתונים ב־iPhone
 

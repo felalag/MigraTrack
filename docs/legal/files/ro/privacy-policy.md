@@ -10,7 +10,7 @@ MigraTrack păstrează datele dvs. pe iPhone-ul și pe Apple Watch-ul dvs. Nu co
 
 Aplicația nu are cont și nici server. Nu conține analize statistice și nici reclame.
 
-MigraTrack este dezvoltată de Ira Babayed.
+MigraTrack este dezvoltată de Iryna Babayed.
 
 ## Datele de pe iPhone
 

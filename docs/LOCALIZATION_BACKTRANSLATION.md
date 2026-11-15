@@ -196,7 +196,7 @@ Languages: Ukrainian, Bulgarian, Kazakh and Greek. Scope: the keys of the checkl
 | uk, bg, kk, el | `settings_member` | "Diary since", "Start", "Member since" | Member | No account exists; the value is the first tracked month (as in batches 2–4) |
 | kk, el | `settings_episodes_logged` | "Logged: 35", "Total: 35" | 35 Logged | 14 characters; the caption above says "episodes" |
 | el | Every UI text with "trigger" where space is short | "factor" ("παράγοντας") | trigger | "εκλυτικός παράγοντας" is long; titles and the report keep the full term |
-| el | `docs/legal/files/el/privacy-policy.md` | "Creator of MigraTrack: Ira Babayed" | MigraTrack is developed by Ira Babayed | Greek verbs and articles show a gender; this form needs none |
+| el | `docs/legal/files/el/privacy-policy.md` | "Creator of MigraTrack: Iryna Babayed" | MigraTrack is developed by Iryna Babayed | Greek verbs and articles show a gender; this form needs none |
 | uk | Complication "LOG" | "INPUT" ("ВВІД") | LOG | 4 characters under a plus sign, as the Russian "ВВОД". The owner approved it. |
 | bg, kk, el | Complication "LOG" | "NEW" | LOG | 4 characters under a plus sign. The owner approved it. |
 | uk, bg, kk, el | Watch and complication "Log Migraine" | "New attack" | Log Migraine | 14 characters on a 40 mm watch, as in batches 2–4. The owner approved it. |
@@ -316,7 +316,7 @@ Languages: Arabic, Hebrew and Urdu. Scope: the keys of the checklist, section 3,
 | ur | `pain_scale_high` | "10 Not capable of work" ("ناقابلِ کار"): not natural Urdu | 10 Disabling | "کام ناممکن" (work impossible), the meaning of batches 2–7 |
 | he | `episode_acute_therapy`, `medication_role_acute`, `onboarding_medication_role_acute`, `onboarding_treatment_subtitle`, Siri description | "Acute" as a loanword ("אקוטי") | Acute | "חד", as Maccabi writes "טיפול בהתקף חד" (HE1) |
 | he | `symptom_paresthesia` | "Tingling / numbness" ("נימול") | Tingling / Paresthesia | "נמלול", the word of HE1 |
-| ar | Privacy Policy, developer sentence | "Ira Babayed (feminine verb) developed MigraTrack" | MigraTrack is developed by Ira Babayed | The passive voice, without a gender: "طُوِّر MigraTrack على يد Ira Babayed" |
+| ar | Privacy Policy, developer sentence | "Iryna Babayed (feminine verb) developed MigraTrack" | MigraTrack is developed by Iryna Babayed | The passive voice, without a gender: "طُوِّر MigraTrack على يد Iryna Babayed" |
 | ar, he, ur | `export_excel` | "(xlsx.)" on the screen: the period moved to the other side | Export as Excel (.xlsx) | A left-to-right mark after "(.xlsx)" |
 | ar | Watch summary | Last episode "6 Jumada al-Ula": the Hijri date of `ar_SA` | Last episode Oct 17 | The watch formats the date with a Gregorian calendar, as the iPhone does |
 | ar | Watch summary | "27" in Western digits next to "/ ٣٠" | 27 / 30 | The watch formats the number with the region (`formatted()`) |

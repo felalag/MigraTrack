@@ -10,7 +10,7 @@ MigraTrack saugo jūsų duomenis jūsų iPhone ir Apple Watch. Mes nerenkame, ne
 
 Programėlė neturi paskyros ir serverio. Joje nėra analitikos ir reklamos.
 
-MigraTrack kuria Ira Babayed.
+MigraTrack kuria Iryna Babayed.
 
 ## Duomenys jūsų iPhone
 

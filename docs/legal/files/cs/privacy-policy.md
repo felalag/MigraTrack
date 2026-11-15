@@ -10,7 +10,7 @@ MigraTrack uchovává vaše data ve vašem iPhonu a na vašich Apple Watch. Vaš
 
 Aplikace nemá účet ani server. Neobsahuje analytiku ani reklamu.
 
-MigraTrack vyvíjí Ira Babayed.
+MigraTrack vyvíjí Iryna Babayed.
 
 ## Data ve vašem iPhonu
 

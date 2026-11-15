@@ -10,7 +10,7 @@ MigraTrack hrani vaše podatke v vašem iPhonu in vaši uri Apple Watch. Vaših 
 
 Aplikacija nima računa in nima strežnika. Ne vsebuje analitike in ne oglasov.
 
-MigraTrack razvija Ira Babayed.
+MigraTrack razvija Iryna Babayed.
 
 ## Podatki v vašem iPhonu
 

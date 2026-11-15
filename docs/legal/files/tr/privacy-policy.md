@@ -10,7 +10,7 @@ MigraTrack verilerinizi iPhone’unuzda ve Apple Watch’unuzda saklar. Verileri
 
 Uygulamanın hesabı ve sunucusu yoktur. Analiz ve reklam içermez.
 
-MigraTrack, Ira Babayed tarafından geliştirilmektedir.
+MigraTrack, Iryna Babayed tarafından geliştirilmektedir.
 
 ## iPhone’unuzdaki veriler
 
